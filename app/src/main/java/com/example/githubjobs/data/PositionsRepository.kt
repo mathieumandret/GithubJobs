@@ -1,17 +1,20 @@
 package com.example.githubjobs.data
 
+import androidx.lifecycle.LiveData
 import com.example.githubjobs.data.local.model.Position
-import io.reactivex.Single
+import io.reactivex.Completable
 
 interface PositionsRepository {
 
-    fun getAllPositions(): Single<List<Position>>
+    fun downloadPositions(): Completable
 
-    fun getPositionById(id: String): Single<Position>
+    fun getAllPositions(): LiveData<List<Position>>
 
-    fun findPositionsByDescription(description: String): Single<List<Position>>
+    fun getPositionById(id: String): LiveData<Position>
 
-    fun findPositionsByLocation(location: String): Single<List<Position>>
+    fun findPositionsByDescription(description: String): LiveData<List<Position>>
 
-    fun findPositionsByLocationAndDescription(location: String, description: String): Single<List<Position>>
+    fun findPositionsByLocation(location: String): LiveData<List<Position>>
+
+    fun findPositionsByLocationAndDescription(location: String, description: String): LiveData<List<Position>>
 }
