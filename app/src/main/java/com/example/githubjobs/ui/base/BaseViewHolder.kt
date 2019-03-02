@@ -1,10 +1,20 @@
 package com.example.githubjobs.ui.base
 
-import android.view.View
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
+import com.example.githubjobs.BR
 
-abstract class BaseViewHolder<T>(private val root: View) : RecyclerView.ViewHolder(root) {
+abstract class BaseViewHolder<T : Any, B : ViewDataBinding>(private val binding: B) :
+    RecyclerView.ViewHolder(binding.root) {
 
-    abstract fun bind(item: T)
+    protected lateinit var item: T
+
+    open fun bind(lifecycleOwner: LifecycleOwner, item: T) {
+        this.item = item
+        binding.lifecycleOwner = lifecycleOwner
+        binding.setVariable(BR.item, item)
+        binding.executePendingBindings()
+    }
 
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.githubjobs.data.PositionsRepository
 import com.example.githubjobs.data.local.model.Position
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
@@ -17,6 +18,7 @@ class PositionListViewModel(app: Application) : AndroidViewModel(app), KoinCompo
     fun refreshPositions(onSuccess: () -> Unit, onError: (err: Throwable) -> Unit) {
         positionsQuery?.dispose()
         positionsQuery = positionsRepository.downloadPositions()
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(onSuccess, onError)
     }
 
