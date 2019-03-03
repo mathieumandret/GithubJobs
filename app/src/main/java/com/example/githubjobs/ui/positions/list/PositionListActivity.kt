@@ -1,29 +1,25 @@
 package com.example.githubjobs.ui.positions.list
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.example.githubjobs.BR
 import com.example.githubjobs.R
+import com.example.githubjobs.data.local.model.Position
 import com.example.githubjobs.databinding.ActivityPositionListBinding
+import com.example.githubjobs.ui.base.BaseActivity
+import com.example.githubjobs.ui.positions.details.PositionDetailsActivity
 import kotlinx.android.synthetic.main.activity_position_list.*
-import org.koin.standalone.KoinComponent
+import org.jetbrains.anko.intentFor
 import org.koin.standalone.inject
 
-class PositionListActivity : AppCompatActivity(), KoinComponent {
+class PositionListActivity : BaseActivity<PositionListViewModel, ActivityPositionListBinding>() {
 
-    private lateinit var binding: ActivityPositionListBinding
-
-    private val viewModel: PositionListViewModel by inject()
+    override val viewModel: PositionListViewModel by inject()
+    override val layoutId = R.layout.activity_position_list
 
     private val adapter = PositionsAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_position_list)
-        binding.setVariable(BR.viewModel, viewModel)
-        binding.lifecycleOwner = this
         setUpAdapter()
         setUpRecyclerView()
         setUpSwipeRefreshLayout()
@@ -31,6 +27,7 @@ class PositionListActivity : AppCompatActivity(), KoinComponent {
 
     private fun setUpAdapter() {
         viewModel.positions.observe(this, Observer { adapter.submitList(it) })
+        adapter.setOnItemClickListener(this::showPositionDetails)
     }
 
     private fun setUpRecyclerView() {
@@ -57,6 +54,13 @@ class PositionListActivity : AppCompatActivity(), KoinComponent {
 
     private fun onRefresh() {
         swipeLayout.isRefreshing = false
-        println("KEK")
+    }
+
+    private fun showPositionDetails(position: Position) {
+        startActivity(
+            intentFor<PositionDetailsActivity>(
+                PositionDetailsActivity.POSITION_ID to position.id
+            )
+        )
     }
 }

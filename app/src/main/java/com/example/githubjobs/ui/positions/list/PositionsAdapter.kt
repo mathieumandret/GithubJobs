@@ -23,6 +23,7 @@ class PositionsAdapter(lifecycleOwner: LifecycleOwner) : BaseAdapter<Position>(l
     }
 
 }) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Position, *> {
         val binding: PositionItemBinding =
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.position_item, parent, false)

@@ -10,8 +10,14 @@ abstract class BaseAdapter<T : Any>(
 ) :
     ListAdapter<T, BaseViewHolder<T, *>>(diffCallback) {
 
+    private var onItemClick: ((item: T) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (item: T) -> Unit) {
+        this.onItemClick = listener
+    }
+
     override fun onBindViewHolder(holder: BaseViewHolder<T, *>, position: Int) {
-        holder.bind(lifecycleOwner, getItem(position))
+        holder.bind(lifecycleOwner, getItem(position), onItemClick)
     }
 
 }

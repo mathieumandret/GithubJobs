@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/layout">
+    <data>
+        <variable name="viewModel" type="com.example.githubjobs.ui.positions.details.PositionDetailsViewModel"/>
+        <import type="com.example.githubjobs.util.Formatters"/>
+    </data>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/DarkLayout">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:context=".ui.positions.details.PositionDetailsActivity">
+
+            <LinearLayout
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp" app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/positionTitle" android:id="@+id/linearLayout">
+                <ImageView
+                        app:cover="@{viewModel.position.companyLogoURL}"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:srcCompat="@tools:sample/avatars"
+                        android:id="@+id/imageView"
+                        tools:ignore="ContentDescription"/>
+            </LinearLayout>
+            <TextView
+                    style="@style/PositionTitle"
+                    tools:text="Java Developper"
+                    android:text="@{viewModel.position.title}"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/positionTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                    android:layout_marginTop="16dp" android:layout_marginStart="8dp"/>
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/positionTitle"
+                    app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp" android:id="@+id/companyInfo">
+                <TextView
+                        style="@style/CompanyName"
+                        android:text="@{viewModel.position.company}"
+                        tools:text="Google"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:id="@+id/companyName"/>
+                <TextView
+                        style="@style/CompanyName"
+                        android:textStyle="normal"
+                        tools:text="Full time"
+                        android:text="@{viewModel.position.type}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/positionType"
+                />
+            </LinearLayout>
+            <TextView
+                    style="@style/PositionLocation"
+                    android:text="@{viewModel.position.location}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Los Angeles"
+                    android:id="@+id/location"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="8dp"
+                    android:drawableStart="@drawable/location_icon"
+                    android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/companyInfo"/>
+
+            <TextView
+                    style="@style/PositionLocation"
+                    android:text="@{viewModel.position.createdAt.toString()}"
+                    tools:text="02/02/2018"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/creationDate"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:drawableStart="@drawable/time_icon"
+                    app:layout_constraintTop_toBottomOf="@+id/location"
+            />
+
+            <TextView
+                    style="@style/PositionDescription"
+                    android:text="@{Formatters.formatHTML(viewModel.position.description)}"
+                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet lacus id nibh ultrices viverra efficitur vel augue. Vestibulum pharetra vulputate tincidunt. Sed at magna non leo porttitor luctus in eu metus. Suspendisse potenti. Curabitur ultrices sem in mollis bibendum. Sed egestas felis laoreet elit facilisis, sed bibendum diam dignissim. Aenean nec orci eu velit congue scelerisque. Aenean id iaculis dolor. Praesent turpis elit, imperdiet sed lectus non, convallis tincidunt tellus. Mauris semper nisl eu sem scelerisque, ac imperdiet est condimentum. Nulla molestie ipsum vel aliquam pharetra. Suspendisse quis volutpat leo. Quisque pharetra dui in lorem facilisis, in commodo purus blandit."
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/description"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="8dp" app:layout_constraintTop_toBottomOf="@+id/creationDate"
+                    android:layout_marginTop="16dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</layout>

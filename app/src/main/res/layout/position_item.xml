@@ -6,33 +6,52 @@
 
     <data>
         <variable name="item" type="com.example.githubjobs.data.local.model.Position"/>
+        <variable name="listener" type="com.example.githubjobs.util.OnItemClickListener"/>
     </data>
 
     <androidx.cardview.widget.CardView
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             app:cardElevation="@dimen/cardview_default_elevation"
             app:cardCornerRadius="4dp"
+            app:cardBackgroundColor="@color/light_grey"
     >
 
         <LinearLayout
+                style="@style/ListItem"
+                android:onClick="@{() -> listener.onClick(item)}"
                 android:layout_width="match_parent"
-                android:padding="8dp"
-                android:layout_height="match_parent"
                 android:orientation="vertical">
 
             <TextView
+                    style="@style/ListItemText"
                     tools:text="Développeur android"
                     android:text="@{item.title}"
-                    android:textSize="20sp"
-                    android:textColor="@android:color/black"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/positionTitleTv"/>
-            <TextView
-                    tools:text="Toulouse"
-                    android:text="@{item.location}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/positionPlaceTv"/>
+                    android:layout_height="wrap_content"
+                    android:id="@+id/positionTitleTv"
+            />
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <TextView
+                        style="@style/ListItemCompany"
+                        android:layout_marginEnd="5dp"
+                        tools:text="Google"
+                        android:text="@{item.company}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                />
+                <TextView
+                        style="@style/ListItemLocation"
+                        tools:text="Toulouse"
+                        android:text="@{item.location}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </LinearLayout>
 
         </LinearLayout>
 
