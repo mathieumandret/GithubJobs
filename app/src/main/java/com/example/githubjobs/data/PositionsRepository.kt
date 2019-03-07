@@ -14,6 +14,8 @@ interface PositionsRepository {
 
     fun findPositionsByDescription(description: String): LiveData<List<Position>>
 
+    fun findPositionByTitle(title: String): LiveData<List<Position>>
+
     fun findPositionsByLocation(location: String): LiveData<List<Position>>
 
     fun findPositionsByLocationAndDescription(location: String, description: String): LiveData<List<Position>>

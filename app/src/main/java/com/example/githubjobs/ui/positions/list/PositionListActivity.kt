@@ -1,15 +1,20 @@
 package com.example.githubjobs.ui.positions.list
 
 import android.os.Bundle
+import android.view.Menu
+import android.widget.SearchView
 import androidx.lifecycle.Observer
 import com.example.githubjobs.R
 import com.example.githubjobs.data.local.model.Position
 import com.example.githubjobs.databinding.ActivityPositionListBinding
 import com.example.githubjobs.ui.base.BaseActivity
 import com.example.githubjobs.ui.positions.details.PositionDetailsActivity
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_position_list.*
 import org.jetbrains.anko.intentFor
 import org.koin.standalone.inject
+import java.util.concurrent.TimeUnit
 
 class PositionListActivity : BaseActivity<PositionListViewModel, ActivityPositionListBinding>() {
 
@@ -25,8 +30,35 @@ class PositionListActivity : BaseActivity<PositionListViewModel, ActivityPositio
         setUpSwipeRefreshLayout()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
+            isIconified = false
+            Observable.create<String> {
+                setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        isIconified = true
+                        return true
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        newText?.let { t -> it.onNext(t) }
+                        return true
+                    }
+
+                })
+            }
+                .filter { it.isNotBlank() }
+                .map { it.trim().toLowerCase() }
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { viewModel.search(it) }
+        }
+        return true
+    }
+
     private fun setUpAdapter() {
-        viewModel.positions.observe(this, Observer { adapter.submitList(it) })
+        viewModel.displayedPositions.observe(this, Observer { adapter.submitList(it) })
         adapter.setOnItemClickListener(this::showPositionDetails)
     }
 

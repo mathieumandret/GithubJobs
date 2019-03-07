@@ -11,7 +11,6 @@ import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
 class PositionsRepositoryImpl : PositionsRepository, KoinComponent {
-
     private val dao: PositionDAO by inject()
     private val api: PositionAPI by inject()
     private val converter = PositionConverter()
@@ -31,8 +30,13 @@ class PositionsRepositoryImpl : PositionsRepository, KoinComponent {
 
 
     override fun findPositionsByDescription(description: String): LiveData<List<Position>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return dao.findPositionsByDescription(description)
     }
+
+    override fun findPositionByTitle(title: String): LiveData<List<Position>> {
+        return dao.findPositionByTitle("%$title%")
+    }
+
 
     override fun findPositionsByLocation(location: String): LiveData<List<Position>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
