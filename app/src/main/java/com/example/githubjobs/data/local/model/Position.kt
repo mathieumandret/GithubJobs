@@ -22,5 +22,7 @@ data class Position(
     @ColumnInfo(name = "how_to_apply")
     val howToApply: String,
     @ColumnInfo(name = "company_logo_url")
-    val companyLogoURL: String?
+    val companyLogoURL: String?,
+    @ColumnInfo(name = "favorite")
+    var isFavorite: Boolean = false
 )

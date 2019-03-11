@@ -12,11 +12,7 @@ interface PositionsRepository {
 
     fun getPositionById(id: String): LiveData<Position>
 
-    fun findPositionsByDescription(description: String): LiveData<List<Position>>
-
     fun findPositionByTitle(title: String): LiveData<List<Position>>
 
-    fun findPositionsByLocation(location: String): LiveData<List<Position>>
-
-    fun findPositionsByLocationAndDescription(location: String, description: String): LiveData<List<Position>>
+    fun update(position: Position)
 }

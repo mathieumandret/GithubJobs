@@ -1,6 +1,7 @@
 package com.example.githubjobs.ui.positions.details
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.lifecycle.Observer
 import com.example.githubjobs.R
 import com.example.githubjobs.databinding.ActivityPositionDetailsBinding
@@ -25,8 +26,24 @@ class PositionDetailsActivity : BaseActivity<PositionDetailsViewModel, ActivityP
     private fun initData() {
         val id = intent.getStringExtra(POSITION_ID)
         viewModel.positionId.value = id
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.details_menu, menu)
+        val favoriteMenuItem = menu?.findItem(R.id.favorite)
         viewModel.position.observe(this, Observer {
-            println(it)
+            favoriteMenuItem?.setIcon(
+                if (it.isFavorite) R.drawable.ic_star else R.drawable.ic_star_border
+            )
+
         })
+        favoriteMenuItem?.setOnMenuItemClickListener {
+            if (viewModel.position.value == null) return@setOnMenuItemClickListener false
+            val currentPosition = viewModel.position.value!!
+            currentPosition.isFavorite = !currentPosition.isFavorite
+            viewModel.updatePosition(currentPosition)
+            return@setOnMenuItemClickListener true
+        }
+        return true
     }
 }

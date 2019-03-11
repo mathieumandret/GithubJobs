@@ -34,22 +34,27 @@ class PositionListActivity : BaseActivity<PositionListViewModel, ActivityPositio
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
             isIconified = false
+            // Créer un observable à partir des évenement changement de texte du champs de recherche
             Observable.create<String> {
                 setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    // Réduire le champs à la soumission
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         isIconified = true
                         return true
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
+                        // Emettre le texte saisit dans l'observable
                         newText?.let { t -> it.onNext(t) }
                         return true
                     }
 
                 })
             }
+                // Ne pas prendre en compte les strings vides
                 .filter { it.isNotBlank() }
                 .map { it.trim().toLowerCase() }
+                // N'émettre que si rien n'a été saisi dans les dernière 300ms
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { viewModel.search(it) }

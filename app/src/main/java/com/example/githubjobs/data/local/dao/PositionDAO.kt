@@ -1,6 +1,5 @@
 package com.example.githubjobs.data.local.dao
 
-import android.graphics.LightingColorFilter
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
@@ -12,8 +11,11 @@ interface PositionDAO : BaseDAO<Position> {
     @Query("SELECT * FROM position")
     fun getAllPositions(): LiveData<List<Position>>
 
-    @Query("SELECT * FROM position WHERE id = :id")
+    @Query("SELECT * FROM position WHERE id LIKE :id")
     fun getPositionById(id: String): LiveData<Position>
+
+    @Query("SELECT * FROM position WHERE id LIKE :id")
+    fun getPositionByIdBlocking(id: String): Position?
 
     @Query("SELECT * FROM position WHERE location LIKE :location")
     fun findPositionsByLocation(location: String): LiveData<List<Position>>

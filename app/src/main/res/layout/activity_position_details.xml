@@ -27,7 +27,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/positionTitle" android:id="@+id/linearLayout">
                 <ImageView
                         app:cover="@{viewModel.position.companyLogoURL}"
-                        android:scaleType="fitCenter"
+                        android:scaleType="centerInside"
                         android:adjustViewBounds="true"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

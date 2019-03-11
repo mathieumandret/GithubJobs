@@ -16,7 +16,6 @@ class PositionListViewModel(app: Application) : AndroidViewModel(app), KoinCompo
     private val positionsRepository: PositionsRepository by inject()
     private val searchFilter = MutableLiveData<String>()
     var displayedPositions: LiveData<List<Position>>
-    val positions: LiveData<List<Position>> = positionsRepository.getAllPositions()
     private var positionsQuery: Disposable? = null
 
     init {
