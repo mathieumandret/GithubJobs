@@ -28,6 +28,10 @@ class PositionListActivity : BaseActivity<PositionListViewModel, ActivityPositio
         setUpAdapter()
         setUpRecyclerView()
         setUpSwipeRefreshLayout()
+        refreshPositionList()
+        viewModel.displayed.observe(this, Observer {
+            println(it)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

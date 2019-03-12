@@ -1,10 +1,7 @@
 package com.example.githubjobs.ui.positions.list
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 import com.example.githubjobs.data.PositionsRepository
 import com.example.githubjobs.data.local.model.Position
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,18 +11,33 @@ import org.koin.standalone.inject
 
 class PositionListViewModel(app: Application) : AndroidViewModel(app), KoinComponent {
     private val positionsRepository: PositionsRepository by inject()
-    private val searchFilter = MutableLiveData<String>()
+    private val searchFilter = MutableLiveData("")
+    private val favoritesOnly = MutableLiveData(false)
+    val displayed = MediatorLiveData<Pair<Boolean, String>>()
     var displayedPositions: LiveData<List<Position>>
     private var positionsQuery: Disposable? = null
 
     init {
-        displayedPositions = Transformations.switchMap(searchFilter) {
-            if (it.isEmpty())
-                positionsRepository.getAllPositions()
-            else
-                positionsRepository.findPositionByTitle(it)
-        }
-        searchFilter.value = ""
+        displayed.addSource(favoritesOnly) { displayed.value = combine(favoritesOnly, searchFilter) }
+        displayed.addSource(searchFilter) { displayed.value = combine(favoritesOnly, searchFilter) }
+        displayedPositions =
+            Transformations.switchMap(displayed) {
+                val filter = it.second
+                val filteredList = if (filter.isEmpty())
+                    positionsRepository.getAllPositions()
+                else
+                    positionsRepository.findPositionByTitle(filter)
+                return@switchMap if (it.first) Transformations.map(filteredList) { pos -> pos.filter { p -> p.isFavorite } } else filteredList
+            }
+    }
+
+    private fun combine(
+        favorites: LiveData<Boolean>,
+        searchFilter: LiveData<String>
+    ): Pair<Boolean, String> {
+        val fav = favorites.value!!
+        val filter = searchFilter.value!!
+        return Pair(fav, filter)
     }
 
     fun refreshPositions(onSuccess: () -> Unit, onError: (err: Throwable) -> Unit) {
