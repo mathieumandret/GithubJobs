@@ -13,8 +13,8 @@ class PositionListViewModel(app: Application) : AndroidViewModel(app), KoinCompo
     private val positionsRepository: PositionsRepository by inject()
     private val searchFilter = MutableLiveData("")
     private val favoritesOnly = MutableLiveData(false)
-    val displayed = MediatorLiveData<Pair<Boolean, String>>()
-    var displayedPositions: LiveData<List<Position>>
+    private val displayed = MediatorLiveData<Pair<Boolean, String>>()
+    private var displayedPositions: LiveData<List<Position>>
     private var positionsQuery: Disposable? = null
 
     init {
@@ -49,6 +49,23 @@ class PositionListViewModel(app: Application) : AndroidViewModel(app), KoinCompo
 
     fun search(key: String) {
         searchFilter.value = key
+    }
+
+    fun resetSearch() {
+        searchFilter.value = ""
+    }
+
+    fun getPositions(): LiveData<List<Position>> {
+        return displayedPositions
+    }
+
+    // Utiliser un getter pour expose un LiveData et pas un MutableLiveData
+    fun getFavoritesOnly(): LiveData<Boolean> {
+        return favoritesOnly
+    }
+
+    fun toggleFavoritesOnly() {
+        favoritesOnly.value = favoritesOnly.value!!.not()
     }
 
 }
