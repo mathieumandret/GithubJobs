@@ -115,6 +115,9 @@ class PositionListActivity : BaseActivity<PositionListViewModel, ActivityPositio
         swipeLayout.setOnRefreshListener {
             refreshPositionList()
         }
+        viewModel.getLoading().observe(this, Observer {
+            swipeLayout.isRefreshing = it
+        })
     }
 
     private fun onRefreshError(err: Throwable) {

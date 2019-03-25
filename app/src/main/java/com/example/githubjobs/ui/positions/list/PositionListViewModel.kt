@@ -20,6 +20,9 @@ class PositionListViewModel(app: Application) : AndroidViewModel(app), KoinCompo
     private val filters = MediatorLiveData<Pair<Boolean, String>>()
     // Liste des posititions envoyée à l'activité en fonction des filtres
     private var displayedPositions: LiveData<List<Position>>
+
+    private val loading: MutableLiveData<Boolean> = MutableLiveData()
+
     // Référence vers la requête de telechargment, permet de l'annuler et d'éviter les fuites mémoires
     // quand le viewmodel est detruit
     private var positionsQuery: Disposable? = null
@@ -60,6 +63,8 @@ class PositionListViewModel(app: Application) : AndroidViewModel(app), KoinCompo
     fun refreshPositions(onSuccess: () -> Unit, onError: (err: Throwable) -> Unit) {
         positionsQuery?.dispose()
         positionsQuery = positionsRepository.downloadPositions()
+            .doOnSubscribe { loading.value = true }
+            .doOnTerminate { loading.value = false }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(onSuccess, onError)
     }
@@ -83,6 +88,10 @@ class PositionListViewModel(app: Application) : AndroidViewModel(app), KoinCompo
 
     fun toggleFavoritesOnly() {
         favoritesOnly.value = favoritesOnly.value!!.not()
+    }
+
+    fun getLoading(): LiveData<Boolean> {
+        return loading
     }
 
 }
