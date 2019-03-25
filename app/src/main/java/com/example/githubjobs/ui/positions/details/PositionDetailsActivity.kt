@@ -31,12 +31,16 @@ class PositionDetailsActivity : BaseActivity<PositionDetailsViewModel, ActivityP
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.details_menu, menu)
         val favoriteMenuItem = menu?.findItem(R.id.favorite)
+
         viewModel.position.observe(this, Observer {
             favoriteMenuItem?.setIcon(
                 if (it.isFavorite) R.drawable.ic_star else R.drawable.ic_star_border
             )
 
         })
+
+        // Quand on clique sur l'icon favori, mettre la position a jour
+        // via le ViewModel
         favoriteMenuItem?.setOnMenuItemClickListener {
             if (viewModel.position.value == null) return@setOnMenuItemClickListener false
             val currentPosition = viewModel.position.value!!

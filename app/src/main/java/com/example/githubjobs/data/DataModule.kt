@@ -8,14 +8,14 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.module
 
 val dataModule = module {
-    // Singleton for the DB
+    // Singleton pour la BDD
     single { Room.databaseBuilder(androidApplication(), AppDatabase::class.java, AppDatabase.DB_NAME).build() }
-    // Singleton for the dao
+    // Singleton pour le DAO
     single {
-        // Resolve the DB dependency 1st
+        // Résoudre la BDD avant de pouvoir avoir le DAO
         get<AppDatabase>().getPositionDAO()
     }
-    // Provide an implementation for the repo interface
+    // Choix de l'implementation pour l'interface PositionsRepository
     single<PositionsRepository> { PositionsRepositoryImpl() }
 
     single { ApiProvider() }

@@ -56,12 +56,16 @@ class PositionListActivity : BaseActivity<PositionListViewModel, ActivityPositio
             }
                 .compose(debounceInput())
                 .subscribe { viewModel.search(it) }
+
+            // Quand on ferme l'input de recherche, annuler la recherche
             setOnCloseListener {
                 viewModel.resetSearch()
                 false
             }
         }
+
         val favoritesItem = menu.findItem(R.id.favorites)
+        // Afficher le bon icone favori en fonction de la valeur émise par le LiveData
         viewModel.getFavoritesOnly().observe(this, Observer {
             favoritesItem.icon = getDrawable(
                 if (it) R.drawable.ic_star else R.drawable.ic_star_border
